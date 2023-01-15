@@ -14,12 +14,12 @@ import { useGlobalcontext } from './contex';
 
 function App() {
 
-  const {showModal} =useGlobalcontext()
+  const {showModal,favorites} =useGlobalcontext()
   return (
     <main className='container '>
       <Header/>
       <Search/>
-      {/*<Favorites/>*/}
+      {favorites.length > 0 && <Favorites/>}
       <Meals/>
       {showModal && <Modal/>}
     </main>

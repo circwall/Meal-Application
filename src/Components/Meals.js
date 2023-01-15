@@ -5,7 +5,7 @@ import {BsHandThumbsUp} from 'react-icons/bs'
 {/*import 'bootstrap/dist/css/bootstrap.min.css';*/}
 
 const Meals =()=>{
-    const {meals,selectedMeal,selectMeal,loading}= useGlobalcontext() 
+    const {meals,selectedMeal,selectMeal,loading,addToFavorites,removeFavorites}= useGlobalcontext() 
     
     if(loading){
         return(
@@ -29,7 +29,7 @@ const Meals =()=>{
                     <img src={image} className='img text-center' onClick={()=>selectMeal(idMeal)}/>
                     <footer>
                         <h5>{title}</h5>
-                        <button className='like-btn '>
+                        <button onClick={()=>addToFavorites(idMeal)} className='like-btn '>
                             <BsHandThumbsUp/>
                         </button>
                     </footer>

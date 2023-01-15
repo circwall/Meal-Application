@@ -1,10 +1,23 @@
 import React,{useContext,useEffect,useState} from "react";
 import axios from 'axios'
+import { json } from "react-router-dom";
 
 const AppContext = React.createContext()
 
 const allMealsUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const randomMealurl='https://www.themealdb.com/api/json/v1/1/random.php'
+
+const getFavoriteFromLocalStrogae= () => {
+    let favorites = localStorage.getItem('favorites')
+    if(favorites){
+        favorites = JSON.parse(localStorage.getItem('favorites'))
+
+    }else{
+        favorites= []
+    }
+
+    return favorites
+}
 
 
 
@@ -14,7 +27,7 @@ const AppProvider =({ children })=>{
     const[searchTerm, setSearchTerm] = useState('');
     const[showModal,setShowModal] =useState(false);
     const[selectedMeal,setSelectedMeal]=useState(null)
-    const[favorites,setFavorites] = useState([]);
+    const[favorites,setFavorites] = useState(getFavoriteFromLocalStrogae());
     
     const fetchRandomMeal = () =>{
         fetchMeals(randomMealurl)
@@ -40,7 +53,11 @@ const AppProvider =({ children })=>{
     const selectMeal = (idMeal, favoriteMeal)=>{
         console.log(idMeal)
         let meal;
-        meal = meals.find((meal)=>meal.idMeal === idMeal)
+        if(favoriteMeal){
+            meal = favorites.find((meal)=>meal.idMeal === idMeal)
+        }else{
+            meal = meals.find((meal)=>meal.idMeal === idMeal)
+        }
         setSelectedMeal(meal)
         setShowModal(true)
     }
@@ -49,16 +66,20 @@ const AppProvider =({ children })=>{
     }
 
     const addToFavorites = (idMeal) =>{
+        console.log(idMeal)
 
-        const meal =meals.find((meal)=>meal.idMeal === idMeal);
+        
         const alreadyFavourites = favorites.find((meal)=>meal.idMeal === idMeal)
         if (alreadyFavourites) return
+        const meal =meals.find((meal)=>meal.idMeal === idMeal);
         const updatedFavorites = [...favorites,meal];
         setFavorites(updatedFavorites)
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     }
     const removeFavorites = (idMeal) =>{
         const updatedFavorites = favorites.filter((meal)=>meal.idMeal !== idMeal);
-        setFavorites(updatedFavorites);
+        setFavorites(updatedFavorites)
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites))
     }
 
     useEffect(()=>{
@@ -74,7 +95,9 @@ const AppProvider =({ children })=>{
     
     
     return(
-    <AppContext.Provider value={{closeModal,showModal,fetchRandomMeal,selectedMeal,selectMeal, loading, meals, setSearchTerm}}>
+    <AppContext.Provider value={{closeModal,showModal,fetchRandomMeal,
+    selectedMeal,selectMeal, loading, meals, setSearchTerm,addToFavorites,
+    removeFavorites,favorites}}>
         { children }
     </AppContext.Provider>
     )
