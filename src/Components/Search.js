@@ -9,6 +9,11 @@ const Search =()=>{
     const handleChange=(e)=>{
         setText(e.target.value)
     }
+    const hanRandomMeal=()=>{
+        setSearchTerm('')
+        setText('')
+        fetchRandomMeal()
+    }
     const handleSubmit = (e) =>{
         e.preventDefault()
         if(text){
@@ -21,7 +26,7 @@ const Search =()=>{
             <form onSubmit={handleSubmit}>
                 <input type='text' placeholder='type favourite meal' value={text} onChange={handleChange} className='form-input'/>
                 <button type='submit' className='btn'>Search</button>
-                <button type='button' onClick={fetchRandomMeal} className='btn btn-hipster'>Surprise me!</button>
+                <button type='button' onClick={hanRandomMeal} className='btn btn-hipster'>Surprise me!</button>
 
             </form>
         </header>

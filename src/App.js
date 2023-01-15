@@ -7,17 +7,21 @@ import Modal from './Components/Modal';
 import Favorites from './Components/Favorites';
 import 'bootstrap/dist/css/bootstrap.css';
 import Header from './Components/Header';
+import { useGlobalcontext } from './contex';
+
 
 
 
 function App() {
+
+  const {showModal} =useGlobalcontext()
   return (
     <main className='container '>
       <Header/>
       <Search/>
       {/*<Favorites/>*/}
       <Meals/>
-      {/*<Modal/>*/}
+      {showModal && <Modal/>}
     </main>
   );
 }
